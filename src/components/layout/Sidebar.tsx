@@ -9,6 +9,10 @@ import {
   Settings,
   User,
 } from "lucide-react";
+import { useAuth } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
+
+
 
 const navigationItems = [
   {
@@ -57,6 +61,8 @@ const bottomItems = [
 ];
 
 function Sidebar() {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   return (
     <aside className="fixed left-0 top-0 z-40 flex h-screen w-64 flex-col border-r border-white/10 bg-[#080c17]">
       {/* Logo */}
@@ -119,7 +125,13 @@ function Sidebar() {
 
       {/* Logout */}
       <div className="border-t border-white/10 p-4">
-        <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 transition-all duration-200 hover:bg-red-500/10 hover:text-red-400">
+        <button 
+        className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-gray-400 transition-all duration-200 hover:bg-red-500/10 hover:text-red-400"
+        onClick={()=>{
+          logout();
+          navigate("/login");
+        }}
+        >
           <LogOut size={20} />
           <span>Logout</span>
         </button>

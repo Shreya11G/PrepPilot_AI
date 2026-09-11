@@ -1,7 +1,22 @@
-import { Link } from "react-router-dom";
+import { Link , useNavigate} from "react-router-dom";
 import { ArrowRight, Code2 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
+
 
 function LoginPage() {
+  const navigate =useNavigate();
+  const { login } =useAuth();
+
+  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  event.preventDefault();
+
+  login({
+    name: "Shreya Gupta",
+    email: "shreya@example.com",
+  });
+  console.log("User logged in");
+  navigate("/dashboard");
+};
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#070b14] px-4 text-white">
       <div className="w-full max-w-md">
@@ -22,7 +37,10 @@ function LoginPage() {
 
         {/* Card */}
         <div className="rounded-2xl border border-gray-800 bg-[#0d1320] p-6 shadow-xl">
-          <form className="space-y-5">
+          <form 
+          className="space-y-5"
+          onSubmit={handleLogin}
+          >
             {/* Email */}
             <div>
               <label

@@ -4,7 +4,7 @@ import DashboardPage from "./pages/DashboardPage";
 import LandingPage from "./pages/LandingPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-
+import ProtectedRoute from "./routes/ProtectedRoute";
 
 function PlaceholderPage({ title }: { title: string }) {
   return (
@@ -22,48 +22,49 @@ function App() {
     <BrowserRouter>
       <Routes>
         {/*Public Route */}
-        <Route path="/" element={<LandingPage/>}/>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         {/*Application routes*/}
-        <Route element={<AppLayout />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-         <Route
-            path="/dsa"
-            element={<PlaceholderPage title="DSA Preparation" />}
-          />
+        <Route element={<ProtectedRoute />}>
+          <Route element={<AppLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route
+              path="/dsa"
+              element={<PlaceholderPage title="DSA Preparation" />}
+            />
 
-          <Route
-            path="/ats"
-            element={<PlaceholderPage title="Resume ATS Checker" />}
-          />
+            <Route
+              path="/ats"
+              element={<PlaceholderPage title="Resume ATS Checker" />}
+            />
 
-          <Route
-            path="/interview"
-            element={<PlaceholderPage title="AI Mock Interview" />}
-          />
+            <Route
+              path="/interview"
+              element={<PlaceholderPage title="AI Mock Interview" />}
+            />
 
-          <Route
-            path="/analytics"
-            element={<PlaceholderPage title="Progress & Analytics" />}
-          />
+            <Route
+              path="/analytics"
+              element={<PlaceholderPage title="Progress & Analytics" />}
+            />
 
-          <Route
-            path="/roadmap"
-            element={<PlaceholderPage title="My Roadmap" />}
-          />
+            <Route
+              path="/roadmap"
+              element={<PlaceholderPage title="My Roadmap" />}
+            />
 
-          <Route
-            path="/profile"
-            element={<PlaceholderPage title="Profile" />}
-          />
+            <Route
+              path="/profile"
+              element={<PlaceholderPage title="Profile" />}
+            />
 
-          <Route
-            path="/settings"
-            element={<PlaceholderPage title="Settings" />}
-          />
+            <Route
+              path="/settings"
+              element={<PlaceholderPage title="Settings" />}
+            />
+          </Route>
         </Route>
-
         {/* 404 */}
         <Route
           path="*"
