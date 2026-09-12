@@ -1,10 +1,82 @@
-import { Link } from "react-router-dom";
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowRight, Code2 } from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 function RegisterPage() {
+  const navigate = useNavigate();
+  const { login } = useAuth();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRegister = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    setError("");
+
+    // Name validation
+    if (!name.trim()) {
+      setError("Please enter your full name.");
+      return;
+    }
+
+    // Email validation
+    if (!email.trim()) {
+      setError("Please enter your email address.");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    // Password validation
+    if (!password) {
+      setError("Please create a password.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    // Confirm password
+    if (!confirmPassword) {
+      setError("Please confirm your password.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    setIsLoading(true);
+
+    // Temporary frontend registration
+    setTimeout(() => {
+      login({
+        name: name.trim(),
+        email: email.trim(),
+      });
+
+      setIsLoading(false);
+      navigate("/dashboard");
+    }, 800);
+  };
+
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#070b14] px-4 py-8 text-white">
       <div className="w-full max-w-md">
+
         {/* Logo */}
         <div className="mb-8 text-center">
           <div className="mb-4 flex justify-center">
@@ -13,16 +85,23 @@ function RegisterPage() {
             </div>
           </div>
 
-          <h1 className="text-2xl font-bold">Create your account</h1>
+          <h1 className="text-2xl font-bold">
+            Create your account
+          </h1>
 
           <p className="mt-2 text-sm text-gray-400">
             Start your personalized SDE preparation journey
           </p>
         </div>
 
-        {/* Card */}
+        {/* Register Card */}
         <div className="rounded-2xl border border-gray-800 bg-[#0d1320] p-6 shadow-xl">
-          <form className="space-y-5">
+
+          <form
+            className="space-y-5"
+            onSubmit={handleRegister}
+          >
+
             {/* Name */}
             <div>
               <label
@@ -35,8 +114,14 @@ function RegisterPage() {
               <input
                 id="name"
                 type="text"
+                value={name}
+                onChange={(event) => {
+                  setName(event.target.value);
+                  setError("");
+                }}
                 placeholder="Your name"
-                className="w-full rounded-lg border border-gray-700 bg-[#080d18] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-purple-500"
+                disabled={isLoading}
+                className="w-full rounded-lg border border-gray-700 bg-[#080d18] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
 
@@ -52,8 +137,14 @@ function RegisterPage() {
               <input
                 id="email"
                 type="email"
+                value={email}
+                onChange={(event) => {
+                  setEmail(event.target.value);
+                  setError("");
+                }}
                 placeholder="you@example.com"
-                className="w-full rounded-lg border border-gray-700 bg-[#080d18] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-purple-500"
+                disabled={isLoading}
+                className="w-full rounded-lg border border-gray-700 bg-[#080d18] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
 
@@ -69,12 +160,18 @@ function RegisterPage() {
               <input
                 id="password"
                 type="password"
+                value={password}
+                onChange={(event) => {
+                  setPassword(event.target.value);
+                  setError("");
+                }}
                 placeholder="Create a password"
-                className="w-full rounded-lg border border-gray-700 bg-[#080d18] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-purple-500"
+                disabled={isLoading}
+                className="w-full rounded-lg border border-gray-700 bg-[#080d18] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
 
-            {/* Confirm password */}
+            {/* Confirm Password */}
             <div>
               <label
                 htmlFor="confirmPassword"
@@ -86,19 +183,40 @@ function RegisterPage() {
               <input
                 id="confirmPassword"
                 type="password"
+                value={confirmPassword}
+                onChange={(event) => {
+                  setConfirmPassword(event.target.value);
+                  setError("");
+                }}
                 placeholder="Confirm your password"
-                className="w-full rounded-lg border border-gray-700 bg-[#080d18] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-purple-500"
+                disabled={isLoading}
+                className="w-full rounded-lg border border-gray-700 bg-[#080d18] px-4 py-3 text-sm text-white outline-none transition placeholder:text-gray-600 focus:border-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
+
+            {/* Error */}
+            {error && (
+              <div className="rounded-lg border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-400">
+                {error}
+              </div>
+            )}
 
             {/* Register */}
             <button
               type="submit"
-              className="flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-purple-500"
+              disabled={isLoading}
+              className="flex w-full items-center justify-center gap-2 rounded-lg bg-purple-600 px-4 py-3 text-sm font-semibold text-white transition hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              Create Account
-              <ArrowRight className="h-4 w-4" />
+              {isLoading ? (
+                "Creating account..."
+              ) : (
+                <>
+                  Create Account
+                  <ArrowRight className="h-4 w-4" />
+                </>
+              )}
             </button>
+
           </form>
 
           {/* Login */}
@@ -111,6 +229,7 @@ function RegisterPage() {
               Sign in
             </Link>
           </p>
+
         </div>
 
         {/* Back */}
@@ -122,6 +241,7 @@ function RegisterPage() {
             ← Back to home
           </Link>
         </div>
+
       </div>
     </div>
   );
